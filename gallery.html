@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evangelion Cyberpunk Interface</title>
+  <style>
+    /* Stile generale */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Arial Black', Arial, sans-serif;
+      background-color: #0d0d0d;
+      color: #00ff00;
+      overflow: hidden;
+    }
+
+    /* Stile della schermata di caricamento */
+    .loading-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      animation: fadeOut 2s ease-in-out 7s forwards;
+    }
+
+    .loading-screen h1 {
+      font-size: 3rem;
+      animation: flicker 2s infinite;
+    }
+
+    .progress-container {
+      margin-top: 20px;
+      width: 300px;
+      height: 10px;
+      background: #1a1a1a;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: #ff8300;
+      width: 0;
+      animation: load 5s linear forwards;
+    }
+
+    /* Scritte verticali */
+    .vertical-text {
+      position: absolute;
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 1.2rem;
+      color: #ff8300;
+      white-space: nowrap;
+      animation: scrollDown 10s linear infinite;
+    }
+
+    .vertical-text span {
+      display: block;
+      writing-mode: vertical-rl;
+      text-orientation: upright;
+    }
+
+    @keyframes scrollDown {
+      0% { transform: translateX(-50%) translateY(-300px); }
+      100% { transform: translateX(-50%) translateY(600px); }
+    }
+
+    /* Animazioni */
+    @keyframes flicker {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+
+    @keyframes load {
+      to { width: 100%; }
+    }
+
+    @keyframes fadeOut {
+      to { opacity: 0; visibility: hidden; }
+    }
+
+    /* Galleria */
+    .gallery {
+      display: none;
+      animation: fadeIn 2s ease-in-out forwards;
+      position: relative;
+      padding: 20px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .gallery-grid img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+    }
+
+    /* Piccole scritte giapponesi */
+    .gallery-small-text {
+      position: absolute;
+      top: 0;
+      left: 0;
+      font-size: 0.8rem;
+      color: #00ff00;
+      opacity: 0.8;
+      animation: fadeInOut 3s infinite alternate;
+    }
+
+    @keyframes fadeInOut {
+      0% { opacity: 0; }
+      100% { opacity: 0.8; }
+    }
+
+    /* Menu finti */
+    .fake-menu {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(255, 131, 0, 0.1);
+      padding: 20px;
+      color: #ff8300;
+      border: 1px solid #ff8300;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      width: 250px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .fake-menu p {
+      margin: 0;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <!-- Schermata di caricamento -->
+  <div class="loading-screen">
+    <h1>ACTIVATING SYSTEM</h1>
+    <div class="progress-container">
+      <div class="progress-bar"></div>
+    </div>
+    <div class="vertical-text">
+      <span>システム起動</span>
+      <span>データ同期中</span>
+      <span>モジュール読み込み中</span>
+      <span>NERV本部</span>
+      <span>緊急事態モード</span>
+      <span>作戦準備中</span>
+    </div>
+  </div>
+
+  <!-- Galleria immagini -->
+  <div class="gallery" id="gallery">
+    <div style="text-align: center; color: #ff8300;">
+      <h2>Welcome to NERV System</h2>
+    </div>
+    <div class="gallery-grid" id="gallery-grid"></div>
+
+    <!-- Piccole scritte giapponesi nella galleria -->
+    <div class="gallery-small-text" style="top: 10px; left: 10px;">データ解析中</div>
+    <div class="gallery-small-text" style="top: 50px; left: 30px;">目標捕捉</div>
+    <div class="gallery-small-text" style="top: 90px; left: 20px;">システム準備完了</div>
+
+    <!-- Menu finti -->
+    <div class="fake-menu" id="fake-menu"></div>
+  </div>
+
+  <script>
+    const totalImages = 16; // Numero totale di immagini nella cartella
+    const imagePath = 'img'; // Percorso della cartella immagini
+
+    // Mostra la galleria dopo il caricamento
+    setTimeout(() => {
+      document.querySelector('.loading-screen').style.display = 'none';
+      document.querySelector('.gallery').style.display = 'block';
+      createGallery();
+      generateFakeMenu();
+    }, 7000);
+
+    // Funzione per generare la galleria
+    function createGallery() {
+      const galleryGrid = document.getElementById('gallery-grid');
+      for (let i = 1; i <= totalImages; i++) {
+        const img = document.createElement('img');
+        img.src = `${imagePath}/${i}.jpg`;
+        galleryGrid.appendChild(img);
+      }
+    }
+
+    // Genera contenuti casuali nel menu finto
+    function generateFakeMenu() {
+      const fakeMenu = document.getElementById('fake-menu');
+      const messages = [
+        "データ処理中...",
+        "システムステータス: 安定",
+        "目標識別中...",
+        "エラー検出なし",
+        "ユニット接続中...",
+        "作戦コード更新",
+        "動作解析成功",
+        "緊急モードアクティベート",
+      ];
+      setInterval(() => {
+        const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+        const p = document.createElement('p');
+        p.textContent = randomMessage;
+        fakeMenu.appendChild(p);
+
+        // Rimuove i messaggi più vecchi per mantenere la lista pulita
+        if (fakeMenu.childNodes.length > 10) {
+          fakeMenu.removeChild(fakeMenu.firstChild);
+        }
+      }, 1500);
+    }
+  </script>
+</body>
+</html>
